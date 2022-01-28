@@ -54,20 +54,7 @@ class ExampleApp(App):
                 for device in scanned_devices:
                     self.line(f"{device.name} {device.rssi}dB")
 
-                for device in scanned_devices:
-                    self.line(f"Connecting to {device.name} ...")
-                    try:
-                        async with bleak.BleakClient(device) as client:
-                            services = await client.get_services()
-                            for service in services.services.values():
-                                self.line(f"  service {service.uuid}")
-                                for characteristic in service.characteristics:
-                                    self.line(
-                                        f"  characteristic {characteristic.uuid} {hex(characteristic.handle)} ({len(characteristic.descriptors)} descriptors)"
-                                    )
-                    except bleak.exc.BleakError as e:
-                        self.line(f"  error {e}")
-                        asyncio.sleep(10)
+
             except bleak.exc.BleakError as e:
                 self.line(f"ERROR {e}")
                 await asyncio.sleep(1)
